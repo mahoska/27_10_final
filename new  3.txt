@@ -1,0 +1,15 @@
+ALTER TABLE `book` CHANGE `name` `name` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `client` ADD `is_admin` BOOLEAN NOT NULL DEFAULT FALSE AFTER `time_life`;
+//insert admin
+UPDATE `client` SET `is_admin` = '1' WHERE `client`.`id` = 8;
+
+ALTER TABLE `historybook` DROP `authors`;
+
+delimiter //
+CREATE TRIGGER clone_rec
+BEFORE delete ON book 
+for each row 
+begin
+	 insert into historybook(book_id, book_name, price) values (old.id, old.name, old.price);
+end
+//
